@@ -38,4 +38,4 @@ script:
   - cd c++/camshift_tracking/opencvtest
   - cmake .
   - make
-  - ./camshift_tracking
+  - ./camshift_tracking 0
