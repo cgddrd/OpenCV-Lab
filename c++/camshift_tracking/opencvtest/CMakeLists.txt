@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 2.8)
+project( camshift_tracking )
+find_package( OpenCV )
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+add_executable( camshift_tracking main.cpp )
+target_link_libraries( camshift_tracking ${OpenCV_LIBS} )
