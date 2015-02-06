@@ -1,0 +1,18 @@
+language:
+  - cpp
+
+compiler:
+  - gcc
+
+install:
+  - git clone https://github.com/jayrambhia/Install-OpenCV
+  - cd Install-OpenCV/Ubuntu
+  - ./opencv_latest.sh
+  - cd ../../
+  - ls -l
+
+script:
+  - cd c++/camshift_tracking/opencvtest
+  - cmake .
+  - make
+  - ./camshift_tracking
