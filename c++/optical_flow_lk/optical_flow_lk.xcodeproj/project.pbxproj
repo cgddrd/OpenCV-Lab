@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		998480ED1A80D62200D0BB70 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 998480EC1A80D62200D0BB70 /* main.cpp */; };
+		99FF28681A8B9D7A00521BD4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99FF28671A8B9D7A00521BD4 /* main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		998480E71A80D62200D0BB70 /* CopyFiles */ = {
+		99FF28621A8B9D7A00521BD4 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -23,12 +23,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		998480E91A80D62200D0BB70 /* opencvtest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = opencvtest; sourceTree = BUILT_PRODUCTS_DIR; };
-		998480EC1A80D62200D0BB70 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		99FF28641A8B9D7A00521BD4 /* optical_flow_lk */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = optical_flow_lk; sourceTree = BUILT_PRODUCTS_DIR; };
+		99FF28671A8B9D7A00521BD4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		998480E61A80D62200D0BB70 /* Frameworks */ = {
+		99FF28611A8B9D7A00521BD4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -38,94 +38,94 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		998480E01A80D62200D0BB70 = {
+		99FF285B1A8B9D7A00521BD4 = {
 			isa = PBXGroup;
 			children = (
-				998480EB1A80D62200D0BB70 /* opencvtest */,
-				998480EA1A80D62200D0BB70 /* Products */,
+				99FF28661A8B9D7A00521BD4 /* optical_flow_lk */,
+				99FF28651A8B9D7A00521BD4 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		998480EA1A80D62200D0BB70 /* Products */ = {
+		99FF28651A8B9D7A00521BD4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				998480E91A80D62200D0BB70 /* opencvtest */,
+				99FF28641A8B9D7A00521BD4 /* optical_flow_lk */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		998480EB1A80D62200D0BB70 /* opencvtest */ = {
+		99FF28661A8B9D7A00521BD4 /* optical_flow_lk */ = {
 			isa = PBXGroup;
 			children = (
-				998480EC1A80D62200D0BB70 /* main.cpp */,
+				99FF28671A8B9D7A00521BD4 /* main.cpp */,
 			);
-			path = opencvtest;
+			path = optical_flow_lk;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		998480E81A80D62200D0BB70 /* opencvtest */ = {
+		99FF28631A8B9D7A00521BD4 /* optical_flow_lk */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 998480F01A80D62200D0BB70 /* Build configuration list for PBXNativeTarget "opencvtest" */;
+			buildConfigurationList = 99FF286B1A8B9D7A00521BD4 /* Build configuration list for PBXNativeTarget "optical_flow_lk" */;
 			buildPhases = (
-				998480E51A80D62200D0BB70 /* Sources */,
-				998480E61A80D62200D0BB70 /* Frameworks */,
-				998480E71A80D62200D0BB70 /* CopyFiles */,
+				99FF28601A8B9D7A00521BD4 /* Sources */,
+				99FF28611A8B9D7A00521BD4 /* Frameworks */,
+				99FF28621A8B9D7A00521BD4 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = opencvtest;
-			productName = opencvtest;
-			productReference = 998480E91A80D62200D0BB70 /* opencvtest */;
+			name = optical_flow_lk;
+			productName = optical_flow_lk;
+			productReference = 99FF28641A8B9D7A00521BD4 /* optical_flow_lk */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		998480E11A80D62200D0BB70 /* Project object */ = {
+		99FF285C1A8B9D7A00521BD4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Connor Goddard";
 				TargetAttributes = {
-					998480E81A80D62200D0BB70 = {
+					99FF28631A8B9D7A00521BD4 = {
 						CreatedOnToolsVersion = 6.1.1;
 					};
 				};
 			};
-			buildConfigurationList = 998480E41A80D62200D0BB70 /* Build configuration list for PBXProject "opencvtest" */;
+			buildConfigurationList = 99FF285F1A8B9D7A00521BD4 /* Build configuration list for PBXProject "optical_flow_lk" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = 998480E01A80D62200D0BB70;
-			productRefGroup = 998480EA1A80D62200D0BB70 /* Products */;
+			mainGroup = 99FF285B1A8B9D7A00521BD4;
+			productRefGroup = 99FF28651A8B9D7A00521BD4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				998480E81A80D62200D0BB70 /* opencvtest */,
+				99FF28631A8B9D7A00521BD4 /* optical_flow_lk */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		998480E51A80D62200D0BB70 /* Sources */ = {
+		99FF28601A8B9D7A00521BD4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				998480ED1A80D62200D0BB70 /* main.cpp in Sources */,
+				99FF28681A8B9D7A00521BD4 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		998480EE1A80D62200D0BB70 /* Debug */ = {
+		99FF28691A8B9D7A00521BD4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -165,7 +165,7 @@
 			};
 			name = Debug;
 		};
-		998480EF1A80D62200D0BB70 /* Release */ = {
+		99FF286A1A8B9D7A00521BD4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -199,7 +199,7 @@
 			};
 			name = Release;
 		};
-		998480F11A80D62200D0BB70 /* Debug */ = {
+		99FF286C1A8B9D7A00521BD4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
@@ -207,24 +207,19 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					/usr/local/include,
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					/usr/local/lib,
-				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				OTHER_LDFLAGS = (
+					"-lopencv_imgproc",
+					"-lopencv_highgui",
+					"-lopencv_video",
 					"-lopencv_core",
 					"-lopencv_features2d",
-					"-lopencv_highgui",
-					"-lopencv_imgproc",
-					"-lopencv_objdetect",
-					"-lopencv_video",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
 		};
-		998480F21A80D62200D0BB70 /* Release */ = {
+		99FF286D1A8B9D7A00521BD4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
@@ -232,18 +227,13 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					/usr/local/include,
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					/usr/local/lib,
-				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				OTHER_LDFLAGS = (
+					"-lopencv_imgproc",
+					"-lopencv_highgui",
+					"-lopencv_video",
 					"-lopencv_core",
 					"-lopencv_features2d",
-					"-lopencv_highgui",
-					"-lopencv_imgproc",
-					"-lopencv_objdetect",
-					"-lopencv_video",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -252,25 +242,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		998480E41A80D62200D0BB70 /* Build configuration list for PBXProject "opencvtest" */ = {
+		99FF285F1A8B9D7A00521BD4 /* Build configuration list for PBXProject "optical_flow_lk" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				998480EE1A80D62200D0BB70 /* Debug */,
-				998480EF1A80D62200D0BB70 /* Release */,
+				99FF28691A8B9D7A00521BD4 /* Debug */,
+				99FF286A1A8B9D7A00521BD4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		998480F01A80D62200D0BB70 /* Build configuration list for PBXNativeTarget "opencvtest" */ = {
+		99FF286B1A8B9D7A00521BD4 /* Build configuration list for PBXNativeTarget "optical_flow_lk" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				998480F11A80D62200D0BB70 /* Debug */,
-				998480F21A80D62200D0BB70 /* Release */,
+				99FF286C1A8B9D7A00521BD4 /* Debug */,
+				99FF286D1A8B9D7A00521BD4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 998480E11A80D62200D0BB70 /* Project object */;
+	rootObject = 99FF285C1A8B9D7A00521BD4 /* Project object */;
 }
