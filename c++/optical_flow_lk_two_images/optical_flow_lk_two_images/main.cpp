@@ -80,13 +80,12 @@ int main(int argc, char** argv) {
     bool needToInit = true;
     
     int i, k;
+    
     TermCriteria termcrit(cv::TermCriteria::MAX_ITER | cv::TermCriteria::EPS, 20, 0.03);
+    
     Size subPixWinSize(10, 10), winSize(31, 31);
-   // namedWindow(rawWindow, WINDOW_AUTOSIZE);
+    
     double angle;
-    
-    
-   // img1.copyTo(prevGrayFrame);
     
     cvtColor(img1, prevGrayFrame, cv::COLOR_BGR2GRAY);
     goodFeaturesToTrack(prevGrayFrame, points1, MAX_COUNT, 0.01, 5, Mat(), 3, 0, 0.04);
@@ -97,95 +96,50 @@ int main(int argc, char** argv) {
     
     calcOpticalFlowPyrLK(prevGrayFrame, grayFrames, points1, points2, status, err, winSize, 3, termcrit, 0, 0.001);
     
+    cout << "Optical Flow Difference:\n\n";
+    
     for (i = k = 0; i < points2.size(); i++) {
         
-        cout << "Optical Flow Difference... X is " << int(points1[i].x - points2[i].x) << "\t Y is " << int(points1[i].y - points2[i].y) << "\t\t" << i << "\n";
+        cout << "Vector: " << i << " - X: " << int(points1[i].x - points2[i].x) << ", Y: " << int(points1[i].y - points2[i].y) << ", Norm: " << norm(points1[i]-points2[i]) << "\n";
         
-        if ((points1[i].x - points2[i].x) > 0) {
+        
+        char str[4];
+        sprintf(str,"%d",i);
+        
+        //CG - Draw the vector number above the vector arrow on the image. 
+        putText(resultFrame, str, points1[i], FONT_HERSHEY_SIMPLEX, 0.8, Scalar(255,255,255));
+        putText(opticalFlow, str, points1[i], FONT_HERSHEY_SIMPLEX, 0.8, Scalar(255,255,255));
+        
+        //CG - If the motion vector is going in the UP direction, draw red arrow.
+        if ((points1[i].y - points2[i].y) > 0) {
             
-            // CG - Note: Scalar COLOUR values use the format (B,G,R).
-            
-            //line(resultFrame, points1[i], points2[i], Scalar(0, 0, 255), 1, 1, 0);
-            
+            // CG - Note: Scalar COLOUR values use the format (B,G,R)
             arrowedLine(resultFrame, points1[i], points2[i], Scalar(0,0,255));
             
             circle(resultFrame, points1[i], 2, Scalar(255, 0, 0), 1, 1, 0);
             
-            //line(opticalFlow, points1[i], points2[i], Scalar(0, 0, 255), 1, 1, 0);
-            
             arrowedLine(opticalFlow, points1[i], points2[i], Scalar(0,0,255));
             
             circle(opticalFlow, points1[i], 1, Scalar(255, 0, 0), 1, 1, 0);
-            
+         
+        //CG - Otherwise the motion must be going DOWN, so draw a green arrow.
         } else {
-            
-            //line(resultFrame, points1[i], points2[i], Scalar(0, 255, 0), 1, 1, 0);
             
             arrowedLine(resultFrame, points1[i], points2[i], Scalar(0,255,0));
             
             circle(resultFrame, points1[i], 2, Scalar(0, 0, 0), 1, 1, 0);
-            
-            //line(opticalFlow, points1[i], points2[i], Scalar(0, 255, 0), 1, 1, 0);
             
             arrowedLine(opticalFlow, points1[i], points2[i], Scalar(0,255,0));
             
             circle(opticalFlow, points1[i], 1, Scalar(255, 0, 0), 1, 1, 0);
         }
         
-        points1[k++] = points1[i];
+        // CG - Don't think I need this - used for unlimited capturing via camera.
         
-        cout << "i = " << i << " k = " << k << "\n";
+        //points1[k++] = points1[i];
+        //cout << "i = " << i << " k = " << k << "\n";
         
     }
-
-    
-//    if (needToInit) {
-//        
-//        goodFeaturesToTrack(grayFrames, points1, MAX_COUNT, 0.01, 5, Mat(), 3, 0, 0.04);
-//        needToInit = false;
-//        
-//    } else if (!points2.empty()) {
-//        
-//        calcOpticalFlowPyrLK(prevGrayFrame, grayFrames, points2, points1,
-//                             status, err, winSize, 3, termcrit, 0, 0.001);
-//        
-//        for (i = k = 0; i < points2.size(); i++) {
-//            cout << "Optical Flow Difference... X is "
-//            << int(points1[i].x - points2[i].x) << "\t Y is "
-//            << int(points1[i].y - points2[i].y) << "\t\t" << i
-//            << "\n";
-//            
-//            if ((points1[i].x - points2[i].x) > 0) {
-//                line(rgbFrames, points1[i], points2[i], Scalar(0, 0, 255),
-//                     1, 1, 0);
-//                
-//                circle(rgbFrames, points1[i], 2, Scalar(255, 0, 0), 1, 1,
-//                       0);
-//                
-//                line(opticalFlow, points1[i], points2[i], Scalar(0, 0, 255),
-//                     1, 1, 0);
-//                circle(opticalFlow, points1[i], 1, Scalar(255, 0, 0), 1, 1,
-//                       0);
-//            } else {
-//                line(rgbFrames, points1[i], points2[i], Scalar(0, 255, 0),
-//                     1, 1, 0);
-//                
-//                circle(rgbFrames, points1[i], 2, Scalar(255, 0, 0), 1, 1,
-//                       0);
-//                
-//                line(opticalFlow, points1[i], points2[i], Scalar(0, 255, 0),
-//                     1, 1, 0);
-//                circle(opticalFlow, points1[i], 1, Scalar(255, 0, 0), 1, 1,
-//                       0);
-//            }
-//            points1[k++] = points1[i];
-//            
-//        }
-//        
-//        goodFeaturesToTrack(grayFrames, points1, MAX_COUNT, 0.01, 10, Mat(),
-//                            3, 0, 0.04);
-//        
-//    }
     
     resize(img1, img1, Size(img1.cols/4, img1.rows/4));
     
@@ -203,97 +157,15 @@ int main(int argc, char** argv) {
     
     namedWindow( "OF", WINDOW_NORMAL );// Create a window for display.
     
-   // while(1) {
-        
-        
-        imshow("Image 1", img1);
+    imshow("Image 1", img1);
     
-        imshow("Image 2", img2);
-        
-        imshow("Result", resultFrame);
+    imshow("Image 2", img2);
     
-        imshow("OF", opticalFlow);
-    //}
-   
+    imshow("Result", resultFrame);
+    
+    imshow("OF", opticalFlow);
+    
+    //CG - Wait for the user to press a key before exiting.
     cvWaitKey(0);
     
-    // imshow(opticalFlowWindow, opticalFlow);
-    
-    //std::swap(points2, points1);
-    
-   // points1.clear();
-    //grayFrames.copyTo(prevGrayFrame);
-    
-//    while (1) {
-//        
-//        cap >> frame;
-//        frame.copyTo(rgbFrames);
-//        cvtColor(rgbFrames, grayFrames, cv::COLOR_BGR2GRAY);
-//        
-//        if (needToInit) {
-//            
-//            goodFeaturesToTrack(grayFrames, points1, MAX_COUNT, 0.01, 5, Mat(), 3, 0, 0.04);
-//            needToInit = false;
-//            
-//        } else if (!points2.empty()) {
-//            
-//            cout << "\n\n\nCalculating  calcOpticalFlowPyrLK\n\n\n\n\n";
-//            calcOpticalFlowPyrLK(prevGrayFrame, grayFrames, points2, points1,
-//                                 status, err, winSize, 3, termcrit, 0, 0.001);
-//            
-//            for (i = k = 0; i < points2.size(); i++) {
-//                cout << "Optical Flow Difference... X is "
-//                << int(points1[i].x - points2[i].x) << "\t Y is "
-//                << int(points1[i].y - points2[i].y) << "\t\t" << i
-//                << "\n";
-//                
-//                if ((points1[i].x - points2[i].x) > 0) {
-//                    line(rgbFrames, points1[i], points2[i], Scalar(0, 0, 255),
-//                         1, 1, 0);
-//                    
-//                    circle(rgbFrames, points1[i], 2, Scalar(255, 0, 0), 1, 1,
-//                           0);
-//                    
-//                    line(opticalFlow, points1[i], points2[i], Scalar(0, 0, 255),
-//                         1, 1, 0);
-//                    circle(opticalFlow, points1[i], 1, Scalar(255, 0, 0), 1, 1,
-//                           0);
-//                } else {
-//                    line(rgbFrames, points1[i], points2[i], Scalar(0, 255, 0),
-//                         1, 1, 0);
-//                    
-//                    circle(rgbFrames, points1[i], 2, Scalar(255, 0, 0), 1, 1,
-//                           0);
-//                    
-//                    line(opticalFlow, points1[i], points2[i], Scalar(0, 255, 0),
-//                         1, 1, 0);
-//                    circle(opticalFlow, points1[i], 1, Scalar(255, 0, 0), 1, 1,
-//                           0);
-//                }
-//                points1[k++] = points1[i];
-//                
-//            }
-//            
-//            goodFeaturesToTrack(grayFrames, points1, MAX_COUNT, 0.01, 10, Mat(),
-//                                3, 0, 0.04);
-//            
-//        }
-//        
-//        imshow(rawWindow, rgbFrames);
-//        // imshow(opticalFlowWindow, opticalFlow);
-//        
-//        std::swap(points2, points1);
-//        
-//        points1.clear();
-//        grayFrames.copyTo(prevGrayFrame);
-//        
-//        keyPressed = waitKey(10);
-//        if (keyPressed == 27) {
-//            break;
-//        } else if (keyPressed == 'r') {
-//            opticalFlow = Mat(cap.get(CV_CAP_PROP_FRAME_HEIGHT),
-//                              cap.get(CV_CAP_PROP_FRAME_HEIGHT), CV_32FC3);
-//        }
-//        
-//    }
 }
