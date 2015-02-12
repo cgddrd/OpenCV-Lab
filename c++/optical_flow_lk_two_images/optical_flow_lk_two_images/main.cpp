@@ -87,6 +87,9 @@ int main(int argc, char** argv) {
     
     double angle;
     
+    CvRect setRect = cvRect(0, 0, 100, 300); // ROI in image
+    
+    
     cvtColor(img1, prevGrayFrame, cv::COLOR_BGR2GRAY);
     goodFeaturesToTrack(prevGrayFrame, points1, MAX_COUNT, 0.01, 5, Mat(), 3, 0, 0.04);
     
@@ -102,11 +105,10 @@ int main(int argc, char** argv) {
         
         cout << "Vector: " << i << " - X: " << int(points1[i].x - points2[i].x) << ", Y: " << int(points1[i].y - points2[i].y) << ", Norm: " << norm(points1[i]-points2[i]) << "\n";
         
-        
         char str[4];
         sprintf(str,"%d",i);
         
-        //CG - Draw the vector number above the vector arrow on the image. 
+        //CG - Draw the vector number above the vector arrow on the image.
         putText(resultFrame, str, points1[i], FONT_HERSHEY_SIMPLEX, 0.8, Scalar(255,255,255));
         putText(opticalFlow, str, points1[i], FONT_HERSHEY_SIMPLEX, 0.8, Scalar(255,255,255));
         
@@ -143,7 +145,7 @@ int main(int argc, char** argv) {
     
     resize(img1, img1, Size(img1.cols/4, img1.rows/4));
     
-    namedWindow( "Image 1", WINDOW_NORMAL );// Create a window for display.
+    namedWindow( "Image 1 ROI", WINDOW_NORMAL );// Create a window for display.
     
     resize(img2, img2, Size(img2.cols/4, img2.rows/4));
     
@@ -157,13 +159,27 @@ int main(int argc, char** argv) {
     
     namedWindow( "OF", WINDOW_NORMAL );// Create a window for display.
     
-    imshow("Image 1", img1);
+    double blah = img1.cols / 2;
     
-    imshow("Image 2", img2);
+    double tenpercent = img1.cols * 0.10;
     
-    imshow("Result", resultFrame);
+    //int tenpercent = (img1.cols * 10)/100;
     
-    imshow("OF", opticalFlow);
+   // int smallwidth = ceil(tenpercent);
+    
+    double smallwidthhalved = tenpercent / 2;
+    
+    cout << (blah - smallwidthhalved) << " " << tenpercent << " " << img1.cols <<"\n";
+    
+    Mat roi = img1( Rect(blah - smallwidthhalved,0,tenpercent,img1.rows) );
+    
+    imshow("Image 1 ROI", roi);
+    
+    imshow("Image 2", img1);
+    
+    //imshow("Result", resultFrame);
+    
+    //imshow("OF", opticalFlow);
     
     //CG - Wait for the user to press a key before exiting.
     cvWaitKey(0);
