@@ -70,8 +70,8 @@ int main(int argc, char** argv) {
     
     TermCriteria termcrit(cv::TermCriteria::MAX_ITER | cv::TermCriteria::EPS, 20, 0.03);
     
-    //CG - Sizde of the search window when conduction tyhe Lucas-Kanade optical flow anaysis.
-    Size winSize(31, 31);
+    //CG - Size of the search window when conducting Lucas-Kanade optical flow analysis.
+    Size winSize(200, 200);
 
     //CG - Calculate a central column through the two images that has a width of 10% of the original images.
     double centre_point = img1.cols / 2;
@@ -81,6 +81,11 @@ int main(int argc, char** argv) {
     //CG - Extract the central column ROI from the two images ready to perform feature detection and optical flow analysis on them.
     Mat roi = img1( Rect(centre_point - half_width_ten_percent,0,width_ten_percent,img1.rows) );
     Mat roi2 = img2( Rect(centre_point - half_width_ten_percent,0,width_ten_percent,img1.rows) );
+    
+    
+    //CG - TEMP CODE TO SWITCH OFF THE COLUMN THING.
+    roi = img1;
+    roi2 = img2;
     
     //CG - Convert the first ROI to gray scale so we can perform Shi-Tomasi feature detection.
     cvtColor(roi, prevGrayFrame, cv::COLOR_BGR2GRAY);
@@ -112,6 +117,7 @@ int main(int argc, char** argv) {
         
         //CG - Push the 'X' coord from the starting position, and the 'Y' coord from the second position, so we can draw a stright line vector showing the displacement (BLUE LINE)
         displacement_points.push_back(Point2f(points1[i].x, points2[i].y));
+
         
         //CG - If the motion vector is going in the UP direction, draw red arrow.
         if ((points1[i].y - points2[i].y) > 0) {
@@ -124,9 +130,9 @@ int main(int argc, char** argv) {
             
             circle(resultFrame, points1[i], 2, Scalar(255, 0, 0), 1, 1, 0);
             
-            arrowedLine(opticalFlow, points1[i], points2[i], Scalar(0,0,255));
+            arrowedLine(resultFrame, points1[i], points2[i], Scalar(0,0,255));
             
-            circle(opticalFlow, points1[i], 1, Scalar(255, 0, 0), 1, 1, 0);
+            circle(resultFrame, points1[i], 1, Scalar(255, 0, 0), 1, 1, 0);
          
         //CG - Otherwise the motion must be going DOWN, so draw a green arrow.
         } else {
@@ -146,6 +152,12 @@ int main(int argc, char** argv) {
         
     }
     
+    //CG - <0.5 = more balance to 'resultFrame', >0.5 = more balance to 'img1'.
+    double alpha = 0.4;
+    
+    //CG - 'resultFrame' is already set to the second image ('img2') anyway.
+    addWeighted(img1, alpha, resultFrame, 1.0 - alpha , 0.0, resultFrame);
+    
     //CG - Resize the images so we can see them on the screen.
     resize(img1, img1, Size(img1.cols/4, img1.rows/4));
     resize(img2, img2, Size(img2.cols/4, img2.rows/4));
@@ -154,17 +166,28 @@ int main(int argc, char** argv) {
     resize(roi, roi, Size(roi.cols/2, roi.rows/2));
     resize(roi2, roi2, Size(roi2.cols/2, roi2.rows/2));
     
+    //CG - Display the two raw imnput images side by side for GUI comparison.
+    Mat inputDisplay(img1.rows, img1.cols+img2.cols, CV_8UC3);
+    Mat left(inputDisplay, Rect(0, 0, img1.cols, img1.rows));
+    img1.copyTo(left);
+    Mat right(inputDisplay, Rect(img1.cols, 0, img2.cols, img2.rows));
+    img2.copyTo(right);
+    
     //CG - Create windows for display.
-    namedWindow( "Image 1 ROI", WINDOW_NORMAL );
+    namedWindow( "Input Images", WINDOW_NORMAL );
     namedWindow( "Image 2", WINDOW_NORMAL );
     namedWindow( "Result", WINDOW_NORMAL );
     namedWindow( "OF", WINDOW_NORMAL );
 
     //CG - Show the images on screen.
-    imshow("Image 1", roi);
-    imshow("Image 2", roi2);
-    imshow("Result", resultFrame);
-    imshow("OF", opticalFlow);
+    imshow("Input Images", inputDisplay);
+    
+    //imshow("Image 2", roi2);
+    
+    imshow("Optical Flow Output (Blended Images)", resultFrame);
+    
+    
+    imshow("Optical Flow Output (Raw)", opticalFlow);
     
     //CG - Wait for the user to press a key before exiting.
     cvWaitKey(0);
