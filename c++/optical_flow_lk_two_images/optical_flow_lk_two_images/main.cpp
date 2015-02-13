@@ -2,6 +2,7 @@
 #include <opencv2/video/tracking.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d/features2d.hpp>
+#include "opencv2/nonfree/nonfree.hpp"
 
 #include <iostream>
 #include <ctype.h>
@@ -53,13 +54,14 @@ int main(int argc, char** argv) {
         return -1;
     }
     
-    Mat frame, grayFrames, rgbFrames, prevGrayFrame, resultFrame;
+    Mat frame, grayFrames, rgbFrames, prevGrayFrame, resultFrame, descriptors;
     
     Mat opticalFlow = Mat(img1.rows, img1.cols, CV_32FC3);
     
     vector<Point2f> points1;
     vector<Point2f> points2;
     vector<Point2f> displacement_points;
+    vector<KeyPoint> keypoints1, keypoints2;
     
     Point2f diff;
     
@@ -88,16 +90,30 @@ int main(int argc, char** argv) {
     roi2 = img2;
     
     //CG - Convert the first ROI to gray scale so we can perform Shi-Tomasi feature detection.
-    cvtColor(roi, prevGrayFrame, cv::COLOR_BGR2GRAY);
+    cvtColor(img1, prevGrayFrame, cv::COLOR_BGR2GRAY);
+    
+   // FAST(prevGrayFrame, keypoints1, 100, true);
+    
+   // SIFT sift(2000,3,0.004);
+    //sift(prevGrayFrame, prevGrayFrame, keypoints1, descriptors, false);
+    
+    SURF surf(50);
+    
+    surf(prevGrayFrame, prevGrayFrame, keypoints1);
+    
+    KeyPoint::convert(keypoints1, points1);
     
     //CG - Perform Shi-Tomasi feature detection.
-    goodFeaturesToTrack(prevGrayFrame, points1, MAX_COUNT, 0.01, 5, Mat(), 3, 0, 0.04);
+    //goodFeaturesToTrack(prevGrayFrame, points1, MAX_COUNT, 0.01, 5, Mat(), 3, 0, 0.04);
     
     img2.copyTo(resultFrame);
     cvtColor(roi2, grayFrames, cv::COLOR_BGR2GRAY);
     
+  //  FAST(grayFrames, keypoints2, 100, true);
+   // KeyPoint::convert(keypoints2, points2);
+    
     //CG - Perform the actual sparse optical flow within the ROI extracted from the two images.
-    calcOpticalFlowPyrLK(prevGrayFrame, grayFrames, points1, points2, status, err, winSize, 3, termcrit, 0, 0.001);
+    calcOpticalFlowPyrLK(img1, img2, points1, points2, status, err, winSize, 3, termcrit, 0, 0.001);
     
     cout << "Optical Flow Difference:\n\n";
     
@@ -132,6 +148,8 @@ int main(int argc, char** argv) {
             
             arrowedLine(resultFrame, points1[i], points2[i], Scalar(0,0,255));
             
+            arrowedLine(opticalFlow, points1[i], displacement_points[i], Scalar(255,0,0));
+            
             circle(resultFrame, points1[i], 1, Scalar(255, 0, 0), 1, 1, 0);
          
         //CG - Otherwise the motion must be going DOWN, so draw a green arrow.
@@ -144,6 +162,8 @@ int main(int argc, char** argv) {
             circle(resultFrame, points1[i], 2, Scalar(0, 0, 0), 1, 1, 0);
             
             arrowedLine(opticalFlow, points1[i], points2[i], Scalar(0,255,0));
+            
+            arrowedLine(opticalFlow, points1[i], displacement_points[i], Scalar(255,0,0));
             
             circle(opticalFlow, points1[i], 1, Scalar(255, 0, 0), 1, 1, 0);
         }

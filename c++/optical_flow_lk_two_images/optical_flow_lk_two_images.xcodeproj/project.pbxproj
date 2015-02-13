@@ -216,6 +216,7 @@
 					"-lopencv_imgproc",
 					"-lopencv_objdetect",
 					"-lopencv_video",
+					"-lopencv_nonfree",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -238,6 +239,7 @@
 					"-lopencv_imgproc",
 					"-lopencv_objdetect",
 					"-lopencv_video",
+					"-lopencv_nonfree",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
