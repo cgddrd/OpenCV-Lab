@@ -37,6 +37,43 @@ static void arrowedLine(Mat& img, Point pt1, Point pt2, const Scalar& color, int
     line(img, p, pt2, color, thickness, line_type, shift);
 }
 
+static void printParams( cv::Algorithm* algorithm ) {
+    std::vector<std::string> parameters;
+    algorithm->getParams(parameters);
+    
+    for (int i = 0; i < (int) parameters.size(); i++) {
+        std::string param = parameters[i];
+        int type = algorithm->paramType(param);
+        std::string helpText = algorithm->paramHelp(param);
+        std::string typeText;
+        
+        switch (type) {
+            case cv::Param::BOOLEAN:
+                typeText = "bool";
+                break;
+            case cv::Param::INT:
+                typeText = "int";
+                break;
+            case cv::Param::REAL:
+                typeText = "real (double)";
+                break;
+            case cv::Param::STRING:
+                typeText = "string";
+                break;
+            case cv::Param::MAT:
+                typeText = "Mat";
+                break;
+            case cv::Param::ALGORITHM:
+                typeText = "Algorithm";
+                break;
+            case cv::Param::MAT_VECTOR:
+                typeText = "Mat vector";
+                break;
+        }
+        std::cout << "Parameter '" << param << "' type=" << typeText << " help=" << helpText << std::endl;
+    }
+}
+
 int main(int argc, char** argv) {
     
     if(argc != 3)
@@ -91,15 +128,27 @@ int main(int argc, char** argv) {
     
     //CG - Convert the first ROI to gray scale so we can perform Shi-Tomasi feature detection.
     cvtColor(img1, prevGrayFrame, cv::COLOR_BGR2GRAY);
-    
-   // FAST(prevGrayFrame, keypoints1, 100, true);
-    
-   // SIFT sift(2000,3,0.004);
+
+    //SIFT sift(2000,3,0.004);
     //sift(prevGrayFrame, prevGrayFrame, keypoints1, descriptors, false);
     
-    SURF surf(50);
+    //CG - This is the same as the code above, but we are just going about it in a different way.
+    Ptr<FeatureDetector> detector = FeatureDetector::create("SIFT");
     
-    surf(prevGrayFrame, prevGrayFrame, keypoints1);
+    //CG - We are setting the parameters manually using the 'ALGORITHM' method 'set' (this is the same as in the constructor above).
+    detector->set("contrastThreshold", 0.004);
+    detector->set("nFeatures", 2000);
+    detector->set("nOctaveLayers", 3);
+    
+    //SURF surf(50);
+    //surf(prevGrayFrame, prevGrayFrame, keypoints1);
+    
+    //FastFeatureDetector detector(15);
+    //detector.detect(prevGrayFrame, keypoints1);
+    
+    printParams(detector);
+
+    detector->detect(prevGrayFrame, keypoints1);
     
     KeyPoint::convert(keypoints1, points1);
     
@@ -108,9 +157,6 @@ int main(int argc, char** argv) {
     
     img2.copyTo(resultFrame);
     cvtColor(roi2, grayFrames, cv::COLOR_BGR2GRAY);
-    
-  //  FAST(grayFrames, keypoints2, 100, true);
-   // KeyPoint::convert(keypoints2, points2);
     
     //CG - Perform the actual sparse optical flow within the ROI extracted from the two images.
     calcOpticalFlowPyrLK(img1, img2, points1, points2, status, err, winSize, 3, termcrit, 0, 0.001);
@@ -133,7 +179,8 @@ int main(int argc, char** argv) {
         
         //CG - Push the 'X' coord from the starting position, and the 'Y' coord from the second position, so we can draw a stright line vector showing the displacement (BLUE LINE)
         displacement_points.push_back(Point2f(points1[i].x, points2[i].y));
-
+        
+     
         
         //CG - If the motion vector is going in the UP direction, draw red arrow.
         if ((points1[i].y - points2[i].y) > 0) {
