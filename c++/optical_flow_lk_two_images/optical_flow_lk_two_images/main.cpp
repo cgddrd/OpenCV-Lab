@@ -127,18 +127,23 @@ int main(int argc, char** argv) {
     roi2 = img2;
     
     //CG - Convert the first ROI to gray scale so we can perform Shi-Tomasi feature detection.
-    cvtColor(img1, prevGrayFrame, cv::COLOR_BGR2GRAY);
+    //cvtColor(img1, prevGrayFrame, cv::COLOR_BGR2GRAY);
+    cvtColor(roi, prevGrayFrame, cv::COLOR_BGR2GRAY);
 
     //SIFT sift(2000,3,0.004);
     //sift(prevGrayFrame, prevGrayFrame, keypoints1, descriptors, false);
     
     //CG - This is the same as the code above, but we are just going about it in a different way.
-    Ptr<FeatureDetector> detector = FeatureDetector::create("SIFT");
+    Ptr<FeatureDetector> detector = FeatureDetector::create("FAST");
     
     //CG - We are setting the parameters manually using the 'ALGORITHM' method 'set' (this is the same as in the constructor above).
-    detector->set("contrastThreshold", 0.004);
-    detector->set("nFeatures", 2000);
-    detector->set("nOctaveLayers", 3);
+//    detector->set("contrastThreshold", 0.004);
+//    detector->set("nFeatures", 2000);
+//    detector->set("nOctaveLayers", 3);
+    
+    // CG - Non-max supression OFF = > no of features (6000+)
+    //detector->set("nonmaxSuppression", false);
+    //detector->set("threshold", 15);
     
     //SURF surf(50);
     //surf(prevGrayFrame, prevGrayFrame, keypoints1);
@@ -159,7 +164,7 @@ int main(int argc, char** argv) {
     cvtColor(roi2, grayFrames, cv::COLOR_BGR2GRAY);
     
     //CG - Perform the actual sparse optical flow within the ROI extracted from the two images.
-    calcOpticalFlowPyrLK(img1, img2, points1, points2, status, err, winSize, 3, termcrit, 0, 0.001);
+    calcOpticalFlowPyrLK(roi, roi2, points1, points2, status, err, winSize, 3, termcrit, 0, 0.001);
     
     cout << "Optical Flow Difference:\n\n";
     
