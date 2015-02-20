@@ -15,6 +15,10 @@ using namespace std;
 
 #define MAX_COUNT 500
 
+#define PERCENTAGE_WIDTH 0.20
+
+vector<Point2f> ScanImagePointer(Mat& I, int step = 50);
+
 static void help()
 {
     printf("\nThis program demonstrates using features2d detector, descriptor extractor and simple matcher\n"
@@ -82,6 +86,10 @@ int main(int argc, char** argv) {
         return -1;
     }
     
+    const bool useRoi = false;
+    
+    static const bool useText = false;
+    
     Mat img1 = imread(argv[1], CV_LOAD_IMAGE_COLOR);
     Mat img2 = imread(argv[2], CV_LOAD_IMAGE_COLOR);
     
@@ -114,7 +122,7 @@ int main(int argc, char** argv) {
 
     //CG - Calculate a central column through the two images that has a width of 10% of the original images.
     double centre_point = img1.cols / 2;
-    double width_ten_percent = img1.cols * 0.10;
+    double width_ten_percent = img1.cols * PERCENTAGE_WIDTH;
     double half_width_ten_percent = width_ten_percent / 2;
     
     //CG - Extract the central column ROI from the two images ready to perform feature detection and optical flow analysis on them.
@@ -123,8 +131,10 @@ int main(int argc, char** argv) {
     
     
     //CG - TEMP CODE TO SWITCH OFF THE COLUMN THING.
-    roi = img1;
-    roi2 = img2;
+    if (!useRoi) {
+        roi = img1;
+        roi2 = img2;
+    }
     
     //CG - Convert the first ROI to gray scale so we can perform Shi-Tomasi feature detection.
     //cvtColor(img1, prevGrayFrame, cv::COLOR_BGR2GRAY);
@@ -134,7 +144,7 @@ int main(int argc, char** argv) {
     //sift(prevGrayFrame, prevGrayFrame, keypoints1, descriptors, false);
     
     //CG - This is the same as the code above, but we are just going about it in a different way.
-    Ptr<FeatureDetector> detector = FeatureDetector::create("FAST");
+    //Ptr<FeatureDetector> detector = FeatureDetector::create("FAST");
     
     //CG - We are setting the parameters manually using the 'ALGORITHM' method 'set' (this is the same as in the constructor above).
 //    detector->set("contrastThreshold", 0.004);
@@ -151,17 +161,26 @@ int main(int argc, char** argv) {
     //FastFeatureDetector detector(15);
     //detector.detect(prevGrayFrame, keypoints1);
     
-    printParams(detector);
+   // printParams(detector);
 
-    detector->detect(prevGrayFrame, keypoints1);
+   // detector->detect(prevGrayFrame, keypoints1);
     
-    KeyPoint::convert(keypoints1, points1);
+   // KeyPoint::convert(keypoints1, points1);
     
     //CG - Perform Shi-Tomasi feature detection.
     //goodFeaturesToTrack(prevGrayFrame, points1, MAX_COUNT, 0.01, 5, Mat(), 3, 0, 0.04);
     
     img2.copyTo(resultFrame);
+    
     cvtColor(roi2, grayFrames, cv::COLOR_BGR2GRAY);
+    
+    
+    //Point2f connorpoint = roi.at<Point2f>(Point(500, 500));
+
+    
+    //points1.push_back(connorpoint);
+    
+    points1 = ScanImagePointer(prevGrayFrame, 50);
     
     //CG - Perform the actual sparse optical flow within the ROI extracted from the two images.
     calcOpticalFlowPyrLK(roi, roi2, points1, points2, status, err, winSize, 3, termcrit, 0, 0.001);
@@ -174,18 +193,26 @@ int main(int argc, char** argv) {
         char str[4];
         sprintf(str,"%d",i);
         
-        //CG - We need to move the X position of both the start and end points for each vector over so that it is displayed within the bounds of thr ROI extracted from the main large image.
-        points1[i].x += (centre_point - half_width_ten_percent);
-        points2[i].x += (centre_point - half_width_ten_percent);
+        if (useRoi) {
+            //CG - We need to move the X position of both the start and end points for each vector over so that it is displayed within the bounds of thr ROI extracted from the main large image.
+            points1[i].x += (centre_point - half_width_ten_percent);
+            points2[i].x += (centre_point - half_width_ten_percent);
+        }
+
         
         //CG - Draw the vector number above the vector arrow on the image.
-        putText(resultFrame, str, points1[i], FONT_HERSHEY_SIMPLEX, 0.8, Scalar(255,255,255));
-        putText(opticalFlow, str, points1[i], FONT_HERSHEY_SIMPLEX, 0.8, Scalar(255,255,255));
+        
+        if (useText) {
+           
+            putText(resultFrame, str, points1[i], FONT_HERSHEY_SIMPLEX, 0.8, Scalar(255,255,255));
+            putText(opticalFlow, str, points1[i], FONT_HERSHEY_SIMPLEX, 0.8, Scalar(255,255,255));
+            
+        }
+        
         
         //CG - Push the 'X' coord from the starting position, and the 'Y' coord from the second position, so we can draw a stright line vector showing the displacement (BLUE LINE)
         displacement_points.push_back(Point2f(points1[i].x, points2[i].y));
         
-     
         
         //CG - If the motion vector is going in the UP direction, draw red arrow.
         if ((points1[i].y - points2[i].y) > 0) {
@@ -231,8 +258,9 @@ int main(int argc, char** argv) {
     addWeighted(img1, alpha, resultFrame, 1.0 - alpha , 0.0, resultFrame);
     
     //CG - Resize the images so we can see them on the screen.
-    resize(img1, img1, Size(img1.cols/4, img1.rows/4));
-    resize(img2, img2, Size(img2.cols/4, img2.rows/4));
+   
+    resize(img1, img1, Size(img1.cols/2, img1.rows/2));
+    resize(img2, img2, Size(img2.cols/2, img2.rows/2));
     resize(resultFrame, resultFrame, Size(resultFrame.cols/2, resultFrame.rows/2));
     resize(opticalFlow, opticalFlow, Size(opticalFlow.cols/2, opticalFlow.rows/2));
     resize(roi, roi, Size(roi.cols/2, roi.rows/2));
@@ -247,9 +275,9 @@ int main(int argc, char** argv) {
     
     //CG - Create windows for display.
     namedWindow( "Input Images", WINDOW_NORMAL );
-    namedWindow( "Image 2", WINDOW_NORMAL );
-    namedWindow( "Result", WINDOW_NORMAL );
-    namedWindow( "OF", WINDOW_NORMAL );
+//    namedWindow( "Image 2", WINDOW_NORMAL );
+//    namedWindow( "Result", WINDOW_NORMAL );
+//    namedWindow( "OF", WINDOW_NORMAL );
 
     //CG - Show the images on screen.
     imshow("Input Images", inputDisplay);
@@ -258,10 +286,79 @@ int main(int argc, char** argv) {
     
     imshow("Optical Flow Output (Blended Images)", resultFrame);
     
-    
     imshow("Optical Flow Output (Raw)", opticalFlow);
     
     //CG - Wait for the user to press a key before exiting.
     cvWaitKey(0);
     
+}
+
+vector<Point2f> ScanImagePointer(Mat& I, int step)
+{
+    
+    int count = 0;
+    
+    vector<Point2f> points;
+    
+    // accept only char type matrices
+    CV_Assert(I.depth() != sizeof(uchar));
+    
+    int channels = I.channels();
+    
+    int nRows = I.rows;
+    
+    // CG - Multiply each row by the colour channels (i.e. 3 for BGR, and 1 for grayscale)
+    int nCols = I.cols * channels;
+    
+//    if (I.isContinuous())
+//    {
+//        nCols *= nRows;
+//        nRows = 1;
+//    }
+    
+    int i,j;
+    uchar* p;
+    for( i = 0; i < nRows; i+=step)
+    {
+        p = I.ptr<uchar>(i);
+        
+        
+        // CG - Here we loop through EACH ROW, and EACH COLOUR CHANNEL WITHIN EACH OF THESE ROWS AS WELL!
+        for ( j = 0; j < nCols; j+=step)
+        {
+            //cout << int(p[j]) << endl;
+            
+            count++;
+            
+            //points.push_back(I.at<Point2f>(i, j));
+            
+            points.push_back(Point2f(j, i));
+            
+            //cout << I.at<Point2f>(i, j).x << endl;
+            
+        }
+    }
+    
+//    // CG - Scan through the rows first (Y)
+//    for(int j = 0;j < img.rows;j++){
+//        
+//        // CG - Then scan through the columns (X)
+//        for(int i = 0;i < img.cols;i++){
+//            
+//            // CG - Need to use the Mat 'step' value to move across pixels.
+////            unsigned char b = input[img.step * j + i];
+////            unsigned char g = input[img.step * j + i + 1];
+////            unsigned char r = input[img.step * j + i + 2];
+//            
+//            //cout << "B: " << int(b) << ", G: " << int(g) << ", R: " << int(r) << endl;
+//            
+//            
+//            //points.push_back(img.at<Point2f>(i, j));
+//            
+//            count++;
+//        }
+//    }
+    
+    // CG - We divide by three so we are only returning the total count pixels (and not each of the CHANNELS within EACH PIXEL as well).
+    return points;
 }
