@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>C4E72988-3C73-4C99-9B03-F2747E9A3635</string>
+	<key>IDESourceControlProjectName</key>
+	<string>image_template_tracking</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>C68313D0F2EEADD80CEC916DDA78126A1A398903</key>
+		<string>https://github.com/cgddrd/OpenCV-Lab.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>c++/image_template_tracking/image_template_tracking.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>C68313D0F2EEADD80CEC916DDA78126A1A398903</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/cgddrd/OpenCV-Lab.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>C68313D0F2EEADD80CEC916DDA78126A1A398903</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C68313D0F2EEADD80CEC916DDA78126A1A398903</string>
+			<key>IDESourceControlWCCName</key>
+			<string>OpenCV-Lab</string>
+		</dict>
+	</array>
+</dict>
+</plist>
